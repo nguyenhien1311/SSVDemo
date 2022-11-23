@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    password: 1234$
+    url: jdbc:postgresql://localhost:5432/StudentD1
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+    
+secret-key : "fme-VlFREass"
+
+expirationMs: 3600000
+
+refreshExpirationMs: 86400000
+ 
