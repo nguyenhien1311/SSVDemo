@@ -18,5 +18,7 @@ public interface ClassEntityRepository extends JpaRepository<ClassEntity, Intege
 	
 	Page<ClassEntity> findClassEntitiesBySubjectId(int id,Pageable pageable);
 	
+	Page<ClassEntity> findClassEntitiesBySubjectIdAndClassNameLike(int id, String name,Pageable pageable);
+	
 	List<ClassEntity> findAllBySubjectId(int id);
 }

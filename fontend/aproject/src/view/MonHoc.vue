@@ -1,22 +1,22 @@
 <template>
-    <div id="app">
+    <div id="SubjectCpn">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <form class="d-flex">
-                        <input class="form-control" type="search" @keypress="search(key)" v-model="key" placeholder="Enter subject name to search" aria-label="Search">
-                        
+                        <input class="form-control" type="search"  v-model="key" placeholder="Enter subject name to search" aria-label="Search">
                     </form>
-                    <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 20px;">Add Subject</button>
+                    <button class="btn btn-outline-success" type="button" style="margin-left: 20px;float:right;" @click="search(key)">Search</button>
                 </div>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 20px;float:right;">Add Subject</button>
             </div>
         </nav>
         
         <br>
-        <div class="tabla-usuarios">
+        <div class="tabla-usuarios container" style="width: 1000px;">
             <br>
             <label><h2>List Subject</h2></label>
-            <table class="table table-hover table-striped table-active">
+            <table class="table table-hover table-striped table-active" >
                 <thead>
                     <th>NO</th>
                     <th>Name</th>
@@ -42,6 +42,7 @@
                     </tr>
                 </tbody>
             </table>
+            <pagination v-model="page" :records="listings.total" :per-page="listings.per_page" @paginate="paginate" />
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -51,17 +52,29 @@
                         <button id="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form @submit.prevent="saveSubject()">
-                            <div class="form-group row">
-                                <input type="hidden" v-model="id">
-                                <input ref="name" class="form-control col-sm-8" placeholder="Subject Name" type="text" v-model="state.name" />
-                                <span v-if="v$.name.$error" style="color: red;">{{v$.name.$errors[0].$message}}</span>
+                        <div class="form-group row">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td>
+                                                <input type="hidden" v-model="id">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><label>Subject name</label></th>
+                                            <td>
+                                                <input ref="name" class="form-control col-sm-8" placeholder="Subject Name" type="text" v-model="state.name" />
+                                                 <span v-if="v$.name.$error" style="color: red;">{{v$.name.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>     
                             </div>
-                            <div class="form-group row container">
-                                <input class="btn btn-primary col col-sm-6" type="submit" value="Save">
-                                <input class="btn btn-danger col col-sm-6" type="reset" value="Reset" @click="clearData()">
-                            </div>
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" type="submit" @click="saveSubject()" value="Save">
+                                <input class="btn btn-danger" type="reset" value="Reset" @click="clearData()">
                     </div>
                 </div>
             </div>
@@ -111,7 +124,7 @@
     </div>
   </div>
 </div>
-    <pagination v-model="page" :records="listings.total" :per-page="listings.per_page" @paginate="paginate" />
+   
 </template>
 
 <script>
@@ -274,12 +287,20 @@ export default {
 </script>
 
 <style>
-#app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+.menu {
+    display: flex;
+    justify-content: center;
+}
+
+.item-menu {
+    margin: 10px;
+    font-size: large;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.link {
+    color: inherit;
+    text-decoration: none;
 }
 </style>

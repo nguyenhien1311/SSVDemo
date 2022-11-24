@@ -4,21 +4,21 @@
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <form class="d-flex">
-                        <input class="form-control" type="search" @keypress="search(key)" v-model="key" placeholder="Enter class name to search" aria-label="Search">
+                        <input class="form-control" type="search" v-model="key" placeholder="Enter class name to search" aria-label="Search">
                     </form>
-                    <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" style="margin-left: 20px;">Add Class</button>
-                    
                     <select id="filter" class="form-control" style="width: 300px;margin-left: 20px;" v-model="selectedId" @change="filterClass()" >
                         <option value="" disabled hidden>Select a subject</option>
                         <option v-for="s in subjects" v-bind:key="s.id" :value="s.id">{{ s.subjectName }}</option>
                     </select>
+                    <button class="btn btn-outline-success" type="button" style="margin-left: 20px;float:right;" @click="search(key)">Search</button>
                 </div>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" style="margin-left: 20px;float:right;">Add Class</button>
             </div>
         </nav>
         <br>
        
         
-        <div class="tabla-usuarios">
+        <div class="tabla-usuarios container" style="width: 1000px;">
             <label><h2>List Class</h2></label>
             <table class="table table-hover table-striped table-active">
                 <thead>
@@ -62,26 +62,47 @@
                         <button id="closeModal1" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form @submit.prevent="saveClass()">
+                        <form>
                             <div class="form-group row">
-                                <input type="hidden" v-model="classId">
-                                <label>Class code</label>
-                                <input ref="code" class="form-control col-sm-8" placeholder="Class code" type="text" v-model="state.code" />
-                                <span v-if="v$.code.$error" style="color: red;">{{v$.code.$errors[0].$message}}</span>
-                                <label>Class Name</label>
-                                <input ref="className" class="form-control col-sm-8" placeholder="Class Name" type="text" v-model="state.className" />
-                                <span v-if="v$.className.$error" style="color: red;">{{v$.className.$errors[0].$message}}</span>
-                                <label>Subject</label>
-                                <select class="form-control col-sm-8" v-model="state.subjectId" :disabled ="isEdit">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td>
+                                                <input type="hidden" v-model="classId">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><label>Class code</label></th>
+                                            <td>
+                                                <input ref="code" class="form-control col-sm-8" placeholder="Class code" type="text" v-model="state.code" />
+                                                 <span v-if="v$.code.$error" style="color: red;">{{v$.code.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"> <label>Class Name</label></th>
+                                            <td>
+                                                <input ref="className" class="form-control col-sm-8" placeholder="Class Name" type="text" v-model="state.className" />
+                                                 <span v-if="v$.className.$error" style="color: red;">{{v$.className.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><label>Subject</label></th>
+                                            <td colspan="2">
+                                                <select class="form-control col-sm-8" v-model="state.subjectId" :disabled ="isEdit">
                                     <option value="" disabled hidden>Select a subject</option>
                                                                                                 <option v-for="s in subjects" v-bind:key="s.id" :value="s.id" placeholder="Choose a subject">{{ s.subjectName }}</option>
                                                                                                 </select>
-                            </div>
-                            <div class="form-group row container footer">
-                                <input class="btn btn-primary col col-sm-6" type="submit" value="Save">
-                                <input class="btn btn-danger col col-sm-6" type="reset" value="Reset" @click="clearData()">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>     
                             </div>
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" type="submit" @click="saveClass()" value="Save">
+                        <input class="btn btn-danger" type="reset" value="Reset" @click="clearData()">
                     </div>
                 </div>
             </div>
@@ -235,6 +256,7 @@ export default {
             papers: [],
             classId: '',
             isEdit: false,
+            isSelected: false,
             selectedId:'',
             currentId: '',
             currentClass: '',
@@ -404,14 +426,15 @@ export default {
             this.isEdit = true
         },
         async filterClass(){
-            const response = await axios.get(urlClass+'?subjectId='+this.selectedId,{
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization':'Bearer ' + this.$store.state.token
-                        }})
-            const data = await response.data.body.pages
-            this.loadClassesData(data.content)
-            this.logData(data)
+            this.isSelected = true;
+            // const response = await axios.get(urlClass+'?subjectId='+this.selectedId,{
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'Authorization':'Bearer ' + this.$store.state.token
+            //             }})
+            // const data = await response.data.body.pages
+            // this.loadClassesData(data.content)
+            // this.logData(data)
         },
         async loadSubject(){
             const response = await axios.get('http://localhost:8080/api/v1/subject/data',{
@@ -463,7 +486,9 @@ export default {
                 this.classes = data
         },
         async search(key) {
-           const response = await axios.get(urlClass + '?key=' + key,{
+            let baseUrl = urlClass + '?key=' + key;
+           const url = (this.isSelected== false) ? baseUrl : (baseUrl +'&subjectId='+this.selectedId)
+           const response = await axios.get(url,{
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization':'Bearer ' + this.$store.state.token
@@ -477,12 +502,20 @@ export default {
 </script>
 
 <style>
-#CategoryCpn {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+.menu {
+    display: flex;
+    justify-content: center;
+}
+
+.item-menu {
+    margin: 10px;
+    font-size: large;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.link {
+    color: inherit;
+    text-decoration: none;
 }
 </style>

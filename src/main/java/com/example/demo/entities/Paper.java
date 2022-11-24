@@ -38,8 +38,10 @@ public class Paper {
 	@Column(name = "status")
 	private Boolean status;
 	
-	@Column(name = "mark")
-	private Double mark;
+	@Column(name = "theory")
+	private Double theory;
+	@Column(name = "practice")
+	private Double practice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "student", referencedColumnName = "id")

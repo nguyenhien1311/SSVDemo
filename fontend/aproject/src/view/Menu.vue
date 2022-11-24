@@ -1,42 +1,34 @@
 <template>
     <div class="MenuBar">
-    
-        <nav class="navbar bg-light">
-    
-            <form class="container-fluid justify-content-start">
-    
-                <button class="btn btn-outline-success me-2" type="button"><router-link to="/">Student</router-link><br></button>
-    
-                <button class="btn btn-outline-success me-2" type="button"> <router-link to="/class">Class</router-link></button>
-                
-                <button class="btn btn-outline-success me-2" type="button"> <router-link to="/monhoc">Subject</router-link></button>
-                <button v-if="this.$store.state.userName == null || this.$store.state.userName == ''" class="btn btn-outline-success me-2" type="button"> <router-link to="/login">Login</router-link></button>
-                <button v-else class="btn btn-outline-success me-2" type="button" @click="logOut()"> Logout</button>
-                <!-- <button v-if="this.userName == null || this.userName == ''" class="btn btn-outline-success me-2" type="button"> <router-link to="/register">Register</router-link></button> -->
-                <p v-if="this.$store.state.userName !=null && this.$store.state.userName != ''">Hello, {{this.$store.state.userName }}</p>
-            </form>
-            
+        <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <router-link to="/"  class=" me-3" >Student</router-link>
+                <router-link to="/class" class=" me-3" >Class</router-link>
+                <router-link to="/monhoc" class=" me-3">Subject</router-link>
+            </div>
+            <div class="d-flex align-items-center">
+                <label class=" px-3 me-2">
+                Hello , {{this.$store.state.userName}}
+                </label>
+                <button type="button" class="btn btn-primary me-3" @click="logOut()">
+                logout
+                </button>
+            </div>
+        </div>
         </nav>
-
     </div>
 </template>
 <script>
 import axios from 'axios';
 export default {
     name: 'MenuBar',
-    data(){
-        return {
-       };
-    },
-    created() {
-        
-    },
     methods : {
         logOut(){
             alert("Logout success ")
             axios.get('http://localhost:8080/api/v1/logout')
             this.$store.commit('logout')
-            this.$router.push("/login");
+            window.location.reload();
         }
     }
 }
