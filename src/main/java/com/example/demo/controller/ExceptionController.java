@@ -12,12 +12,16 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.exception.CustomException;
 import com.example.demo.response.ExceptionResponse;
+import com.example.demo.response.RootResponse;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController{
 	
 	@ExceptionHandler(value = CustomException.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -55,6 +59,13 @@ public class ExceptionController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(new ExceptionResponse(ex.getMessage()));
+	}
+	@ExceptionHandler(value = ExpiredJwtException.class)
+	@ResponseStatus(code = HttpStatus.OK)
+	public ResponseEntity<?> oasd(ExpiredJwtException ex){
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(RootResponse.builder().code(401).message(ex.getMessage()).build());
 	}
 	
 	

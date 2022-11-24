@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,8 +24,10 @@ import com.example.demo.exception.CustomException;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.request.user.LoginRequest;
+import com.example.demo.request.user.TokenCheckRequest;
 import com.example.demo.request.user.UserCreateRequest;
 import com.example.demo.response.user.LoginResponse;
+import com.example.demo.response.user.RefreshTokenResponse;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
 import com.example.demo.util.UserDTO;
@@ -34,13 +37,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
 	private final UserRepository repository;
 	private final RoleRepository roleRepository;
 	private final JwtTokenProvider jwt;
 	private final AuthenticationManager authenticationManager;
 	private final PasswordEncoder encoder = new BCryptPasswordEncoder(BCryptVersion.$2A);
-	
+
 	@Override
 	public List<User> getAll() {
 		// TODO Auto-generated method stub
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public LoginResponse login(LoginRequest request) {
-		
+
 		Optional<User> optional = repository.findUserByUsername(request.getUsername());
 		if (optional.isEmpty()) {
 			throw new CustomException(Messages.MSG_022);
@@ -68,19 +70,16 @@ public class UserServiceImpl implements UserService {
 		if (!matches) {
 			throw new CustomException(Messages.MSG_023);
 		}
-		
-		
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-		
+
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
-		String token = jwt.generateToken(authentication);
-		LoginResponse result = LoginResponse.builder()
-				.userId(user.getId())
-				.userName(user.getUsername())
-				.token(token)
-				.build();
-		
+
+		String accessToken = jwt.generateToken(authentication);
+		LoginResponse result = LoginResponse.builder().userId(user.getId()).userName(user.getUsername())
+				.token(accessToken).build();
+
 		return result;
 	}
 
@@ -97,6 +96,26 @@ public class UserServiceImpl implements UserService {
 		if (authentication != null) {
 			new SecurityContextLogoutHandler().logout(request, response, authentication);
 		}
+	}
+
+	@Override
+	public RefreshTokenResponse refreshToken(TokenCheckRequest request) {
+		// TODO Auto-generated method stub
+
+		return null;
+	}
+
+	@Override
+	public Integer checkExpireDate(@Valid TokenCheckRequest request) {
+		// TODO Auto-generated method stub
+		String token = request.getToken();
+		long l = jwt.getExpireDateFromToken(token);
+		long currentTimeMillis = System.currentTimeMillis();
+		if (l - currentTimeMillis < 0) {
+			return 401;
+		}
+
+		return 200;
 	}
 
 }

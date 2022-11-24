@@ -10,4 +10,5 @@ import com.example.demo.entities.Student;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer>{
 	Page<Student> findAllByNameLikeIgnoreCase(String name ,Pageable pageable);
+
 }	

@@ -8,9 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.constant.Messages;
 import com.example.demo.entities.ClassEntity;
 import com.example.demo.helper.PaperExcelExporter;
 import com.example.demo.request.classentity.ClassCreateRequest;
@@ -41,7 +39,7 @@ import com.example.demo.util.DatetimeUtil;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin
-@Controller
+@RestController
 @RequestMapping("/api/v1/class")
 @RequiredArgsConstructor
 public class ClassController extends AppController{
@@ -76,27 +74,31 @@ public class ClassController extends AppController{
 		return sucess(findById);
 	}
 	
-	@RequestMapping(value =  "/{id}/excel",method = RequestMethod.GET)
+	@GetMapping("/{id}/excel")
 	public void exportPaper(HttpServletResponse response, 
 			@PathVariable(name = "id")int id) throws IOException{
 		List<PaperResponse> list = paperService.getAllByClassId(id);
 		ClassResponse findById = service.findById(id);
 		
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
         String currentDateTime = dateFormatter.format(DatetimeUtil.NOW);
-        String filename = findById.getClassName()+ "_Papers_" + currentDateTime + ".csv";
-        
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
-        response.setContentType("application/csv");
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename="+findById.getClassName()+ "_Papers_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        response.setContentType("application/octet-stream");
         
         PaperExcelExporter exporter = new PaperExcelExporter(list);
+        
         exporter.export(response);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteClass(@PathVariable(name="id")int id){
+	public RootResponse deleteClass(@PathVariable(name="id")int id){
 		service.deleteEntity(id);
-		return ResponseEntity.ok(null);
+		return RootResponse.builder()
+				.message(Messages.MSG_021)
+				.build();
 	}
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> endClass(@PathVariable(name="id")int id){

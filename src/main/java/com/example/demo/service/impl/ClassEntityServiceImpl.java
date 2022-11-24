@@ -90,21 +90,15 @@ public class ClassEntityServiceImpl implements ClassEntityService {
 
 	@Override
 	public void deleteEntity(int id) {
-//		Optional<ClassEntity> findById = repository.findById(id);
-//		if (findById.isEmpty()) {
-//			throw new CustomException(ExceptionStringUtil.CLASS_NOT_FOUND + id);
-//		}
-//		ClassEntity entity = findById.get();
-//		if (!entity.getStatus().equals(ClassStatus.CREATED)) {
-//			throw new CustomException(ExceptionStringUtil.DELETE_CLASS_ERROR);
-//		}
-//		List<Student> findAllByClassId = studentRepository.findAllByClassId(id);
-//		findAllByClassId.forEach(t -> {
-//			t.setClassId(null);
-//			studentRepository.save(t);
-//		});
-//
-//		repository.delete(entity);
+		Optional<ClassEntity> findById = repository.findById(id);
+		if (findById.isEmpty()) {
+			throw new CustomException(Messages.MSG_013 + id);
+		}
+		ClassEntity entity = findById.get();
+		if (!entity.getStatus().equals(ClassStatus.CREATED)) {
+			throw new CustomException(Messages.MSG_025);
+		}
+		repository.delete(entity);
 	}
 
 	@Override

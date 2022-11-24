@@ -24,4 +24,5 @@ public class Messages {
 	public static final String MSG_020 = "Already join this class";
 	public static final String MSG_023 = "Password incorrect";
 	public static final String MSG_024 = "Logout complete";
+	public static final String MSG_025 = "CAN NOT DELETE CLASS ALREADY STARTED";
 }

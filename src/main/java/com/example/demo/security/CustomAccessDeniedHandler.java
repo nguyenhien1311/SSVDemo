@@ -23,7 +23,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 		// TODO Auto-generated method stub
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
-			RootResponse root = RootResponse.builder().code(401).message("Access denied").build();
+			RootResponse root = RootResponse.builder().code(403).message("Access denied").build();
 			String json = new ObjectMapper().writeValueAsString(root);
 			response.setContentType("application/json;charset=UTF-8");
 			response.getWriter().write(json);
