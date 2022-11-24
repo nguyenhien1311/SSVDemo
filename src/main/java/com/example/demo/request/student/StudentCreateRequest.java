@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class StudentCreateRequest {
 	
-	@NotBlank(message = "Name mus not be blank")
+	@NotBlank(message = "Name must not be blank")
 	@Size(min = 5 , max =35 , message = "Name length at least 5 and max 35 characters!")
 	private String name;
 	

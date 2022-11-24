@@ -77,6 +77,7 @@ public class ClassController extends AppController{
 	@GetMapping("/{id}/excel")
 	public void exportPaper(HttpServletResponse response, 
 			@PathVariable(name = "id")int id) throws IOException{
+		
 		List<PaperResponse> list = paperService.getAllByClassId(id);
 		ClassResponse findById = service.findById(id);
 		

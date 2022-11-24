@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class TokenCheckRequest {
-	@NotBlank()
+	@NotBlank(message = "Token can not be null")
 	private String token;
 }
