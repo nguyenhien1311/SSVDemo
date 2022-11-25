@@ -32,11 +32,15 @@ public class ClassEntityServiceImpl implements ClassEntityService {
 	public Page<ClassEntity> getAll(int skip, int limit, String name, int subjectId) {
 		Page<ClassEntity> data = null;
 		if (name != null && name != "") {
-			data = repository.findClassEntitiesByClassNameLike("%" + name + "%",
-					PageRequest.of(skip, limit, Sort.by(Sort.Direction.ASC, "status")));
-		} else if(subjectId != 0) {
-			data = repository.findClassEntitiesBySubjectId(subjectId, PageRequest.of(skip, limit, Sort.by(Sort.Direction.ASC, "status")));
-		}else{
+			if(subjectId != 0) {
+				data = repository.findClassEntitiesBySubjectIdAndClassNameLike(subjectId,
+						"%" + name + "%",
+						PageRequest.of(skip, limit, Sort.by(Sort.Direction.ASC, "status")));
+			}else {
+				data = repository.findClassEntitiesByClassNameLike("%" + name + "%",
+						PageRequest.of(skip, limit, Sort.by(Sort.Direction.ASC, "status")));
+			}
+		} else{
 			data = repository.findAll(PageRequest.of(skip, limit, Sort.by(Sort.Direction.ASC, "status")));
 		}
 		return data;

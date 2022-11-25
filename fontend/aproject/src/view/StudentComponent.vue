@@ -4,11 +4,11 @@
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <form class="d-flex">
-                        <input class="form-control" type="search" @keypress="search(key)" v-model="key" placeholder="Enter student name to search" aria-label="Search">
-                        
+                        <input class="form-control" type="search" v-model="key" placeholder="Enter student name to search" aria-label="Search">
                     </form>
-                    <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 20px;">Add Student</button>
+                    <button class="btn btn-outline-success" type="button" style="margin-left: 20px;float:right;" @click="search(key)">Search</button>
                 </div>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-left: 20px;float:right;">Add Student</button>
             </div>
         </nav>
         
@@ -53,22 +53,47 @@
                         <button id="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form @submit.prevent="saveStudent()">
+                        <form >
                             <div class="form-group row">
-                                <input type="hidden" v-model="id">
-                                <input ref="name" class="form-control col-sm-8" placeholder="Full Name" type="text" v-model="state.name" />
-                                <span v-if="v$.name.$error" style="color: red;">{{v$.name.$errors[0].$message}}</span>
-                                <input ref="email" class="form-control col-sm-8" placeholder="Email" type="text" v-model="state.email" />
-                                <span v-if="v$.email.$error" style="color: red;">{{v$.email.$errors[0].$message}}</span>
-                                <input ref="phone" class="form-control col-sm-8" placeholder="Phone Number" type="text" v-model="state.phone" />
-                                <span v-if="v$.phone.$error" style="color: red;">{{v$.phone.$errors[0].$message}}</span>
-                            </div>
-                            <div class="form-group row container">
-                                <input class="btn btn-primary col col-sm-6" type="submit" value="Save">
-                                <input class="btn btn-danger col col-sm-6" type="reset" value="Reset" @click="clearData()">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td>
+                                                <input type="hidden" v-model="id">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><label>Full name</label></th>
+                                            <td>
+                                                <input ref="name" class="form-control col-sm-8" placeholder="Full Name" type="text" v-model="state.name" />
+                                                <span v-if="v$.name.$error" style="color: red;">{{v$.name.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><label>Email Address</label></th>
+                                            <td>
+                                                <input ref="email" class="form-control col-sm-8" placeholder="Email" type="text" v-model="state.email" />
+                                                <span v-if="v$.email.$error" style="color: red;">{{v$.email.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"> <label>Phone number</label></th>
+                                            <td colspan="2">
+                                                <input ref="phone" class="form-control col-sm-8" placeholder="Phone Number" type="text" v-model="state.phone" />
+                                                <span v-if="v$.phone.$error" style="color: red;">{{v$.phone.$errors[0].$message}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </form>
+                        
                     </div>
+                    <div class="modal-footer">
+                            <input class="btn btn-primary " type="submit" @click="saveStudent()" value="Save">
+                            <input class="btn btn-danger " type="reset" value="Reset" @click="clearData()">
+                        </div>
                 </div>
             </div>
         </div>
@@ -88,6 +113,9 @@
                         <option value="" disabled hidden>Select a class to join</option>
                         <option v-for="s in classes" v-bind:key="s.id" :value="s.id">{{ s.className }}</option>
                     </select>
+               
+            </div>
+            <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Join</button>
             </div>
         </form>
@@ -126,7 +154,8 @@
                         <thead>
                         <th>NO</th>
                         <th>Class Name</th>
-                        <th>Mark</th>
+                        <th>Mark Theory</th>
+                        <th>Mark Practice</th>
                         <th>Status</th>
                         <th>Action</th>
                     </thead>
@@ -134,12 +163,16 @@
                         <tr v-for="(p, index) in papers" :key="p.id">
                             <td>{{ index +1 }}</td>
                             <td>{{ p.className }}</td>
-                            <td>{{ p.mark==null?'0':p.mark }}</td>
+                            <td>{{ p.theory==null?'0':p.theory }}</td>
+                            <td>{{ p.practice==null?'0':p.practice }}</td>
                             <td>{{ p.isPass==null?'Not complete':p.isPass?'Passed':'Failed' }}</td>
                             <td v-if="p.isPass==null"> 
                                 <form @submit.prevent="saveMark()">
                                     <input id="paperId" type="hidden" :value="p.id">
-                                    <input type="number" min="0" max="10" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" v-model="mark" >
+                                    <label for="theory">Theory mark</label>
+                                    <input type="number" min="0" max="10" class="form-control mb-2 mr-sm-2" id="theory" v-model="theory" >
+                                    <label for="theory">Practice mark</label>
+                                    <input type="number" min="0" max="10" class="form-control mb-2 mr-sm-2" id="practice" v-model="practice" >
                                     <button type="submit" class="btn btn-primary mb-2">Submit</button>
                                 </form>
                             </td>
@@ -220,7 +253,8 @@ export default {
              paper:'',
              paperId: 0,
              currentId: '',
-             mark:'',
+             theory:'',
+             practice:'',
             id: '',
             classId: '',
             className: '',
@@ -276,7 +310,7 @@ export default {
            
         },
         saveMark(){
-            axios.put(paperUrl + document.getElementById('paperId').value , { 'mark': this.mark},{
+            axios.put(paperUrl + document.getElementById('paperId').value , { 'theory': this.theory,'practice': this.practice},{
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization':'Bearer ' + this.$store.state.token
@@ -344,11 +378,12 @@ export default {
             this.currentId = id
             this.loadClasses()
         },
-        exportData(id) {
+        exportData() {
+            
             const header = {
                             'Authorization':'Bearer ' + this.$store.state.token
                         }
-            axios.get(url+ id+'/excel',{
+            axios.get(url+ this.currentId+'/excel',{
                         headers: header,
                         responseType: 'blob'
                     })
@@ -456,12 +491,20 @@ export default {
 </script>
 
 <style>
-#app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+.menu {
+    display: flex;
+    justify-content: center;
+}
+
+.item-menu {
+    margin: 10px;
+    font-size: large;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.link {
+    color: inherit;
+    text-decoration: none;
 }
 </style>

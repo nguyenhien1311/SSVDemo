@@ -7,7 +7,8 @@ public class PaperDTO {
 	public static PaperResponse getResponse(Paper p) {
 		return PaperResponse.builder()
 				.id(p.getId())
-				.mark(p.getMark())
+				.theory(p.getTheory())
+				.practice(p.getPractice())
 				.className(p.getClassEntity().getClassName())
 				.studentName(p.getStudent().getName())
 				.isPass(p.getStatus())

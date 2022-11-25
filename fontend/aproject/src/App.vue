@@ -1,6 +1,6 @@
 <template>
-   <div class="app">
-    <MenuBar />
+   <div class="app container">
+    <MenuBar v-if="this.$store.state.isLogin"/>
     <router-view />
    </div>
 </template>
@@ -12,7 +12,7 @@ export default {
     name: 'app',
     components: {
         MenuBar
-    }
+    },
 }
 </script>
 

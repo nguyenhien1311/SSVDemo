@@ -27,7 +27,7 @@ public class PaperController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> savePaper(@PathVariable(name = "id")int id,
 			@RequestBody PaperUpdateRequest request){
-		boolean savePaper = service.savePaper(id, request.getMark());
+		boolean savePaper = service.savePaper(id, request);
 		String result = savePaper ? "Successed" : "Failed";
 		return new ResponseEntity<>(Messages.MSG_003 + result , HttpStatus.OK);
 	}

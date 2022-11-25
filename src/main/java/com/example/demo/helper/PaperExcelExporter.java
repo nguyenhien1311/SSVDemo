@@ -36,11 +36,12 @@ public class PaperExcelExporter {
         font.setFontHeight(16);
         style.setFont(font);
          
-        createCell(row, 0, "Paper ID", style);      
-        createCell(row, 1, "Student name", style);       
-        createCell(row, 2, "Class Name", style);    
-        createCell(row, 3, "Mark", style);
-        createCell(row, 4, "Result", style);
+        createCell(row, 5, "Paper ID", style);      
+        createCell(row, 6, "Student name", style);       
+        createCell(row, 7, "Class Name", style);    
+        createCell(row, 8, "Theory Mark", style);
+        createCell(row, 9, "Practice Mark", style);
+        createCell(row, 10, "Result", style);
          
     }
 	
@@ -74,7 +75,8 @@ public class PaperExcelExporter {
             createCell(row, columnCount++, p.getId(), style);
             createCell(row, columnCount++, p.getStudentName(), style);
             createCell(row, columnCount++, p.getClassName(), style);
-            createCell(row, columnCount++, p.getMark(), style);
+            createCell(row, columnCount++, p.getTheory(), style);
+            createCell(row, columnCount++, p.getPractice(), style);
             createCell(row, columnCount++, p.getIsPass(), style);
              
         }

@@ -39,7 +39,7 @@ public class AccessController extends AppController {
 	}
 
 	@PostMapping("/login")
-	public RootResponse login(@RequestBody LoginRequest request) {
+	public RootResponse login(@Valid @RequestBody LoginRequest request) {
 		LoginResponse response = service.login(request);
 
 		return sucess(response);

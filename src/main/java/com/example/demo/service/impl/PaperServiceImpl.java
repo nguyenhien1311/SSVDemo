@@ -15,6 +15,7 @@ import com.example.demo.repository.ClassEntityRepository;
 import com.example.demo.repository.PaperRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.request.paper.PaperCreateRequest;
+import com.example.demo.request.paper.PaperUpdateRequest;
 import com.example.demo.response.paper.PaperResponse;
 import com.example.demo.service.PaperService;
 import com.example.demo.util.PaperDTO;
@@ -38,15 +39,18 @@ public class PaperServiceImpl implements PaperService {
 	}
 
 	@Override
-	public boolean savePaper(int id, int mark) {
+	public boolean savePaper(int id, PaperUpdateRequest request) {
 		Optional<Paper> findById = repository.findById(id);
 		if (findById.isEmpty()) {
 			throw new CustomException(Messages.MSG_011 + id);
 		}
-		boolean result = (mark >= 5) ? true : false;
+		boolean resultTheory = (request.getTheory() >= 5) ? true : false;
+		boolean resultPractice = (request.getPractice() >= 5) ? true : false;
+		boolean result = (resultTheory == true && resultPractice == true) ? true : false;
 		Paper paper = findById.get();
 		paper.setStatus(result);
-		paper.setMark(Double.valueOf(mark));
+		paper.setPractice(Double.valueOf(request.getPractice()));
+		paper.setTheory(Double.valueOf(request.getTheory()));
 		Student student = studentRepository.findById(paper.getStudentId()).get();
 		student.setInClass(false);
 		studentRepository.save(student);

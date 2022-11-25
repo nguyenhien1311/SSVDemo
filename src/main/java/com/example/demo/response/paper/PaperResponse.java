@@ -18,5 +18,6 @@ public class PaperResponse extends ResponseBody{
 	private String studentName;
 	private String className;
 	private Boolean isPass;
-	private Double mark;
+	private Double theory;
+	private Double practice;
 }

@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class PaperUpdateRequest {
-	@NotBlank(message = "Mark must no tbe empty")
-	private int mark;
+
+	@NotBlank(message = "Practice mark must not be empty")
+	private int practice;
+	@NotBlank(message = "Theory mark must not be empty")
+	private int theory;
 }
