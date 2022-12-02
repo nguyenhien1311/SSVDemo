@@ -13,4 +13,5 @@ public class LoginResponse extends ResponseBody {
 	private String userName;
 	private int userId;
 	private String token;
+	private String authorities;
 }

@@ -10,7 +10,7 @@ public class PaperDTO {
 				.theory(p.getTheory())
 				.practice(p.getPractice())
 				.className(p.getClassEntity().getClassName())
-				.studentName(p.getStudent().getName())
+				.studentName(p.getUser().getFullName())
 				.isPass(p.getStatus())
 				.build();
 	}

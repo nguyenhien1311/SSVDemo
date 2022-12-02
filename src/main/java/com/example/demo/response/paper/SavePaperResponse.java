@@ -1,8 +1,5 @@
-package com.example.demo.response.student;
+package com.example.demo.response.paper;
 
-import org.springframework.data.domain.Page;
-
-import com.example.demo.entities.Student;
 import com.example.demo.response.ResponseBody;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper=false)
-public class PageStudentResponse extends ResponseBody{
-	private Page<Student> pages;
+public class SavePaperResponse  extends ResponseBody{
+	private String message;
 }

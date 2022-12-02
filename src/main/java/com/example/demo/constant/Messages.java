@@ -1,17 +1,22 @@
 package com.example.demo.constant;
 
 public class Messages {
+	public static final String TITLE_EMAIL = "You just register a account";
 	public static final String MSG_001 = "Insert Complete";
+	public static final String MSG_038 = "Insert Failed";
 	public static final String MSG_002 = "Update Complete";
+	public static final String MSG_030 = "Update Failed";
 	public static final String MSG_021 = "Delete Complete";
+	public static final String MSG_032 = "Delete Failed";
 	public static final String MSG_003 = "Paper save ";
 	public static final String MSG_004 = "User account save ";
 	public static final String MGS_005 = "Login ";
 	public static final String MSG_006 = "Change Subject Status ";
 	public static final String MSG_007 = "Join Class ";
-	public static final String MSG_008 = "CANT FIND STUDNET WITH ID : ";
+	public static final String MSG_008 = "CANT FIND USER WITH ID : ";
+	public static final String MSG_031 = "CANT FIND ROLE WITH ID : ";
 	public static final String MSG_009 = "CANT FIND USER WITH USER NAME : ";
-	public static final String MSG_022 = "User name not correct";
+	public static final String MSG_022 = "User name or password INCORRECT";
 	public static final String MSG_010 = "PASSWORD INCORRECT";
 	public static final String MSG_011 = "CANT FIND PAPER WITH ID : ";
 	public static final String MSG_012 = "PAPER NOT EXSIST";
@@ -19,10 +24,20 @@ public class Messages {
 	public static final String MSG_014 = "CANT FIND SUBJECT WITH ID : ";
 	public static final String MSG_015 = "EMAIL MUST BE INFORM";
 	public static final String MSG_016 = "EMAIL ALREADY TAKEN ";
-//	public static final String DELETE_CLASS_ERROR = "CAN NOT DELETE CLASS ALREADY STARTED ";
-//	public static final String ENDDATE_NOT_EXCEPTED = "End date must > than start date";
+	public static final String MSG_026 = "CAN NOT DELETE CLASS ALREADY STARTED ";
+	public static final String MSG_027 = "End date must > than start date";
 	public static final String MSG_020 = "Already join this class";
 	public static final String MSG_023 = "Password incorrect";
 	public static final String MSG_024 = "Logout complete";
 	public static final String MSG_025 = "CAN NOT DELETE CLASS ALREADY STARTED";
+	public static final String MSG_028 = "Username already taken";
+	public static final String MSG_029 = "Fail to parse date type";
+	public static final String MSG_033 = "Save paper successfully";
+	public static final String MSG_034 = "Join class successfully";
+	public static final String MSG_035 = "Cant find role with id : ";
+	public static final String MSG_036 = "Save list user successfully";
+	public static final String MSG_040 = "Save list subject successfully";
+	public static final String MSG_039 = "Save list class successfully";
+	public static final String MSG_037 = "Fail to import file because some unique data duplicated";
+	public static final String MSG_041 = "Fail to import file because some data not match";
 }

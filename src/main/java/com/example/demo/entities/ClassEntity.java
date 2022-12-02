@@ -32,11 +32,14 @@ public class ClassEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "code")
-	private String code;
-	
 	@Column(name = "class_name")
 	private String className;
+	
+	@Column(name = "start_date")
+	private String startDate;
+	
+	@Column(name = "end_date")
+	private String endDate;
 	
 	@Column(name="status")
 	private ClassStatus status;

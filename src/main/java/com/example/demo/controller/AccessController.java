@@ -32,10 +32,11 @@ public class AccessController extends AppController {
 	private final UserService service;
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> addUser(@RequestBody UserCreateRequest request) {
+	public ResponseEntity<RootResponse> addUser(@Valid @RequestBody UserCreateRequest request) {
 		boolean addUser = service.addUser(request);
 		String result = addUser ? "Successed" : "Failed";
-		return new ResponseEntity<>(Messages.MSG_004 + result, HttpStatus.OK);
+		RootResponse response = RootResponse.builder().code(200).message(Messages.MSG_004 + result).build();
+		 return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@PostMapping("/login")

@@ -1,5 +1,7 @@
 package com.example.demo.request.classentity;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -12,10 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClassUpdateRequest {
-	@NotBlank(message = "Class code must no tbe empty")
-	private String code;
-	@NotBlank(message = "Class name must no tbe empty")
+	@NotBlank(message = "Start date must not be empty")
+	private Date startDate;
+	@NotBlank(message = "End date must not be empty")
+	private Date endDate;
+	@NotBlank(message = "Class name must not be empty")
 	private String className;
-	@NotBlank(message = "Subject Id must no tbe empty")
-	private int subjectId;
+
 }

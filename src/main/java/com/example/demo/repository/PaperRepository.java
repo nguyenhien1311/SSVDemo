@@ -9,6 +9,6 @@ import com.example.demo.entities.Paper;
 
 public interface PaperRepository extends JpaRepository<Paper, Integer> {
 	List<Paper> findAllPapersByClassId(int id);
-	List<Paper> findPapersByStudentId(int id);
-	Optional<Paper> findPaperByStudentIdAndClassId(int studentId,int classId);
+	List<Paper> findPapersByUserId(int id);
+	Optional<Paper> findPaperByUserIdAndClassId(int uid,int classId);
 }

@@ -22,15 +22,15 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
-@Table(name = "paper")
+@Table(name = "Paper")
 public class Paper {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "student_id")
-	private int studentId;
+	@Column(name = "user_id")
+	private int userId;
 	
 	@Column(name = "class_id")
 	private int classId;
@@ -44,12 +44,12 @@ public class Paper {
 	private Double practice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "student", referencedColumnName = "id")
+	@JoinColumn(name = "usere", referencedColumnName = "id")
 	@JsonBackReference
-	private Student student;
+	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "class", referencedColumnName = "id" )
+	@JoinColumn(name = "class", referencedColumnName = "id")
 	@JsonBackReference
 	private ClassEntity classEntity;
 }

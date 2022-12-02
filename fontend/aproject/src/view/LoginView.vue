@@ -32,10 +32,10 @@
                                         </tr>
                                     </tbody>
                                 </table>     
-        <!-- <div class="alternative-option mt-4">
-          You don't have an account? <button @click="moveToRegister">Register</button>
-        </div> -->
-        <button type="submit" class="mt-4 btn-pers" id="login_button">
+        <div >
+          You don't have an account? <a @click="moveToRegister" style="cursor: pointer; color: blue;">Register</a>
+        </div>
+        <button type="submit" class="btn btn-success" id="login_button">
           Login
         </button>
       </form>
@@ -45,8 +45,6 @@
 <script>
 import axios from 'axios'
 const url = 'http://localhost:8080/api/v1/'
-import { mapState } from 'vuex';
-
 import { reactive,computed } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import {required} from '@vuelidate/validators'
@@ -58,8 +56,6 @@ export default {
           password: ""
         })
         
-
-
         const rules = computed(()=>{
             return {
             username:{required},
@@ -78,9 +74,6 @@ export default {
     return {
     };
   },
-  computed:mapState({
-
-  }),
   methods: {
      login(submitEvent) {
       this.v$.$validate();
@@ -94,18 +87,22 @@ export default {
                     }).then(response => (this.handleData(response.data)))
                   }
     },
-    // moveToRegister() {
-    //   this.$router.push("/register");
-    // },
+    moveToRegister() {
+      this.$router.push("/register");
+    },
     handleData(data) {  
             if (data.msg != undefined) {
                 alert(data.msg)
             }else if (data == undefined) {
                 alert(data)
             }
-           
       this.$store.commit('setUser',data.body)
-      this.$router.push("/")
+      if(this.$store.state.authorities == 'ROLE_USER'){
+        this.$router.push("/student/")
+      }else{
+        this.$router.push("/")
+      }
+      
     }
   },
 };

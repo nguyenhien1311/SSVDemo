@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.constant.Messages;
 import com.example.demo.constant.ResponseCode;
@@ -38,6 +43,7 @@ public class SubjectController  extends AppController{
 	private final SubjectService service;
 	private final ClassEntityService entityService;
 
+	@Secured({"ROLE_SUPERVISOR","ROLE_ADMIN"})
 	@GetMapping("/")
 	public RootResponse getAll(@RequestParam(name = "skip", required = false, defaultValue = "0") int skip,
 			@RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
@@ -48,6 +54,7 @@ public class SubjectController  extends AppController{
 		.build();
 		return sucess(response);
 	}
+	@Secured({"ROLE_SUPERVISOR","ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/data")
 	public RootResponse getData(){
 		List<Subject> list = service.getData();
@@ -56,11 +63,13 @@ public class SubjectController  extends AppController{
 		.build();
 		return sucess(response);
 	}
+	@Secured({"ROLE_SUPERVISOR","ROLE_ADMIN"})
 	@GetMapping("/{id}")
 	public RootResponse getById(@PathVariable("id")int id) {
 		SubjectResponse all = service.getById(id);
 		return sucess(all);
 	}
+	@Secured({"ROLE_SUPERVISOR","ROLE_ADMIN"})
 	@GetMapping("/{id}/classes")
 	public RootResponse getDataById(@PathVariable("id")int id) {
 		List<ClassEntity> all = entityService.getAllBySubjectId(id);
@@ -69,34 +78,49 @@ public class SubjectController  extends AppController{
 		.build();
 		return sucess(response);
 	}
-	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping("/")
-	public RootResponse insertSubject(@RequestBody SubjectCreateRequest request){
+	public ResponseEntity<RootResponse> insertSubject(@RequestBody SubjectCreateRequest request){
 		service.insertSubject(request);
-		return RootResponse.builder()
+		 RootResponse response = RootResponse.builder()
 				.code(ResponseCode.CREATED)
 				.message(Messages.MSG_001)
 				.build();
-		
+		 return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/{id}")
-	public RootResponse updateSubject(
+	public ResponseEntity<RootResponse> updateSubject(
 			@PathVariable("id")Integer id
 			,@RequestBody SubjectUpdateRequest request){
 		service.updateSubject(request,id);
-		return RootResponse.builder()
+		 RootResponse response = RootResponse.builder()
 				.code(ResponseCode.CREATED)
 				.message(Messages.MSG_002)
 				.build();
+		 return ResponseEntity.status(HttpStatus.OK).body(response);
 	} 
-	
+	@Secured({"ROLE_ADMIN"})
 	@PatchMapping("/{id}")
-	public RootResponse changeStatus(@PathVariable("id")int id){
+	public ResponseEntity<RootResponse> changeStatus(@PathVariable("id")int id){
 		boolean changeStatus = service.changeStatus(id);
 		String result = changeStatus ? "Completed" : "failed";
-		return RootResponse.builder()
+		 RootResponse response = RootResponse.builder()
 				.code(ResponseCode.OK)
 				.message(Messages.MSG_006 + result)
 				.build();
+		 return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@PostMapping("/import")
+	public ResponseEntity<RootResponse> importFile(@RequestParam("file")MultipartFile file) throws IOException{
+		service.importFile(file);
+		RootResponse response = RootResponse.builder()
+				.code(200)
+				.message(Messages.MSG_040)
+				.body(null)
+				.build();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 }

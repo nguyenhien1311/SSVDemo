@@ -1,5 +1,8 @@
-package com.example.demo.response.student;
+package com.example.demo.response.user;
 
+import org.springframework.data.domain.Page;
+
+import com.example.demo.entities.User;
 import com.example.demo.response.ResponseBody;
 
 import lombok.AllArgsConstructor;
@@ -13,11 +16,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper=false)
-public class StudentResponse extends ResponseBody{
-	private int id;
-	private String name;
-	private String email;
-	private String phone;
-	private boolean status;
-	private boolean inClass;
+public class PageUserReponse extends ResponseBody{
+	Page<User> pages;
 }

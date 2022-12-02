@@ -1,7 +1,7 @@
 spring:
   datasource:
     password: 1234$
-    url: jdbc:postgresql://localhost:5432/StudentD1
+    url: jdbc:postgresql://localhost:5432/StudentD
     username: postgres
   jpa:
     hibernate:
@@ -13,10 +13,23 @@ spring:
     show-sql: true
   main:
     allow-bean-definition-overriding: true
-    
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: learn.skydash@gmail.com
+    password: dqvztujborjibzce
+    properties:
+      mail:
+        smtp:
+          timeout: 5000
+          connectiontimeout : 5000
+          writetimeout: 5000
+          auth: true
+          starttls: 
+            enable: true 
+          
 secret-key : "fme-VlFREass"
 
 expirationMs: 3600000
 
 refreshExpirationMs: 86400000
- 

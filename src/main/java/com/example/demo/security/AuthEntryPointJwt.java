@@ -20,6 +20,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
+		
 		RootResponse root = RootResponse.builder().code(401).message("Not access").build();
 		String json = new ObjectMapper().writeValueAsString(root);
 		response.setContentType("application/json;charset=UTF-8");

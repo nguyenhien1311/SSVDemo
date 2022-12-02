@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -23,13 +24,15 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
-@Table(name = "Subject")
+@Table(name = "Subject",uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "subject_name" })
+})
 public class Subject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "subject_name")
+	@Column(name = "subject_name",unique = true)
 	private String subjectName;
 	
 	@Column(name = "status")

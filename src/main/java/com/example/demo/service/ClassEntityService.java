@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entities.ClassEntity;
 import com.example.demo.request.classentity.ClassCreateRequest;
@@ -14,6 +16,7 @@ public interface ClassEntityService {
 	Page<ClassEntity>	getAll(int skip, int limit,String name, int subjectId);
 	
 	List<ClassResponse> getData();
+	 Page<ClassEntity> getDataPage(int skip, int limit, String name, int subjectId);
     
     ClassResponse addNew(ClassCreateRequest e);
     
@@ -26,4 +29,6 @@ public interface ClassEntityService {
     void endClass(int id);
     
     void deleteEntity(int id);
+
+	void importFile(MultipartFile file) throws IOException;
 }

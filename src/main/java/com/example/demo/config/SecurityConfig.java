@@ -24,7 +24,7 @@ import com.example.demo.service.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true, securedEnabled = true)
 public class SecurityConfig {
 
 	@Autowired
@@ -63,11 +63,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable();
-		http.authorizeHttpRequests().antMatchers("/api/v1/login","api/v1/logout","/api/v1/signin","/api/v1/expire").permitAll()
-				.antMatchers("/api/v1/class/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPERVISOR")
-				.antMatchers("/api/v1/student/**").hasAnyAuthority("ROLE_USER", "ROLE_SUPERVISOR")
-				.antMatchers("/api/v1/subject/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN", "ROLE_SUPERVISOR").anyRequest()
-				.authenticated();
+		http.authorizeHttpRequests().antMatchers("/api/v1/login", "api/v1/logout", "/api/v1/signin", "/api/v1/expire")
+				.permitAll().anyRequest().authenticated();
 //		http.headers().frameOptions().sameOrigin();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

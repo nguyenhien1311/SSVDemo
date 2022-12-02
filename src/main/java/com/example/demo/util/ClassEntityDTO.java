@@ -3,84 +3,53 @@ package com.example.demo.util;
 import java.text.ParseException;
 import java.util.List;
 
+import com.example.demo.constant.Messages;
 import com.example.demo.entities.ClassEntity;
 import com.example.demo.enums.ClassStatus;
+import com.example.demo.exception.CustomException;
 import com.example.demo.request.classentity.ClassCreateRequest;
 import com.example.demo.request.classentity.ClassUpdateRequest;
 import com.example.demo.response.classes.ClassResponse;
 
 public class ClassEntityDTO {
+	
 	public static ClassResponse getRespone(ClassEntity e) throws ParseException {
 
-		return ClassResponse.builder()
-				.id(e.getId())
-				.code(e.getCode())
-				.className(e.getClassName())
-				.status(e.getStatus())
-				.subjectId(e.getSubjectId())
-				.build();
+		return ClassResponse.builder().id(e.getId()).className(e.getClassName()).status(e.getStatus())
+				.startDate(DatetimeUtil.fromStringtoDate(e.getStartDate()))
+				.endDate(DatetimeUtil.fromStringtoDate(e.getEndDate()))
+				.subjectId(e.getSubjectId()).build();
 	}
 
 	public static ClassEntity fromCreateRequest(ClassCreateRequest e) {
-		return ClassEntity.builder()
-				.code(e.getCode())
-				.className(e.getClassName())
-				.status(ClassStatus.CREATED)
-				.subjectId(e.getSubjectId())
+		return ClassEntity.builder().className(e.getClassName())
+				.startDate(DatetimeUtil.fromDatetoString(e.getStartDate()))
+				.endDate(DatetimeUtil.fromDatetoString(e.getEndDate()))
+				.status(ClassStatus.CREATED).subjectId(e.getSubjectId())
 				.build();
 	}
 
-	public static ClassEntity fromUpdateRequest(ClassUpdateRequest e, int id) {
-		return ClassEntity.builder()
-				.id(id)
-				.code(e.getCode())
-				.className(e.getClassName())
-				.status(ClassStatus.CREATED)
-				.subjectId(e.getSubjectId())
-				.build();
+	public static ClassEntity fromUpdateRequest(ClassUpdateRequest e, ClassEntity entity) {
+		entity.setClassName(e.getClassName());
+		entity.setStartDate(DatetimeUtil.fromDatetoString(e.getStartDate()));
+		entity.setEndDate(DatetimeUtil.fromDatetoString(e.getEndDate()));
+		return entity;
 	}
 
-	public static List<ClassResponse> getListResponse(List<ClassEntity> list) {
+	public static List<ClassResponse> getListResponse(List<ClassEntity> list){
 		return list.stream().map(t -> {
-			return ClassResponse.builder()
-					.id(t.getId())
-					.className(t.getClassName())
-					.code(t.getCode())
-					.build();
+			try {
+				return ClassResponse.builder().id(t.getId())
+						.startDate(DatetimeUtil.fromStringtoDate(t.getStartDate()))
+						.endDate(DatetimeUtil.fromStringtoDate(t.getEndDate()))
+						.className(t.getClassName()).build();
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				throw new CustomException(Messages.MSG_029);
+			}
 		}).toList();
 	}
 
 
-//	public static List<ClassEntity> updateStatusListClass(Page<ClassEntity> data) {
-//		return data.toList().stream().map(t -> {
-//			return ClassEntity.builder()
-//					.id(t.getId())
-//					.code(t.getCode())
-//					.className(t.getClassName())
-//					.status(updateStatus(t))
-//					.build();
-//		}).toList();
-//	}
-
-//	public static ClassStatus updateStatus(ClassEntity c) {
-//		ClassStatus result = null;
-//		if (!c.getStatus().equals(ClassStatus.ENDED)) {
-//			try {
-//				Date endDate = DatetimeUtil.fromStringtoDate(c.getEndDate());
-//				Date startDate = DatetimeUtil.fromStringtoDate(c.getStartDate());
-//				if (DatetimeUtil.NOW.after(endDate)) {
-//					result = ClassStatus.ENDED;
-//				} else if (DatetimeUtil.NOW.after(startDate) && DatetimeUtil.NOW.before(endDate)) {
-//					result = ClassStatus.ONGOING;
-//				} else {
-//					result = ClassStatus.CREATED;
-//				}
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			return result;
-//		}
-//		return ClassStatus.ENDED;
-//	}
 }

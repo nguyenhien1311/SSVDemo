@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.demo.entities.Role;
 import com.example.demo.entities.User;
 import com.example.demo.request.user.UserCreateRequest;
+import com.example.demo.response.user.UserResponse;
 
 public class UserDTO {
 	
@@ -21,7 +22,21 @@ public class UserDTO {
 				.username(request.getUsername())
 				.password(encoder.encode(request.getPassword()))
 				.roles(roles)
+				.email(request.getEmail())
+				.phone(request.getPhone())
+				.fullName(request.getName())
 				.status(true)
+				.build();
+	}
+	
+	public static UserResponse getResponse(User user) {
+		return UserResponse.builder()
+				.id(user.getId())
+				.email(user.getEmail())
+				.fullName(user.getFullName())
+				.phone(user.getPhone())
+				.username(user.getUsername())
+				.password("")
 				.build();
 	}
 }

@@ -1,12 +1,19 @@
 package com.example.demo.service.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.constant.Messages;
 import com.example.demo.entities.Subject;
@@ -31,9 +38,9 @@ public class SubjectServiceImpl implements SubjectService {
 		Page<Subject> data = null;
 		if (name != null && name != "") {
 			data = repository.findSubjectsBySubjectNameLikeIgnoreCase("%" + name + "%",
-					PageRequest.of(skip, limit, Sort.by(Sort.Direction.DESC, "status")));
+					PageRequest.of(skip, limit, Sort.by(Sort.Order.desc("status"),Sort.Order.asc("subjectName")) ));
 		} else {
-			data = repository.findAll(PageRequest.of(skip, limit, Sort.by(Sort.Direction.DESC, "status")));
+			data = repository.findAll(PageRequest.of(skip, limit, Sort.by(Sort.Order.desc("status"),Sort.Order.asc("subjectName")) ));
 		}
 		return data;
 	}
@@ -80,6 +87,32 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override
 	public List<Subject> getData() {
 		return repository.findSubjectsByStatusIsTrue();
+	}
+
+	@Override
+	public void importFile(MultipartFile file) throws IOException {
+		// TODO Auto-generated method stub
+		ArrayList<Subject> list = new ArrayList<>();
+		XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+			if (i > 0) {
+				XSSFRow row = sheet.getRow(i);
+				Subject subject = Subject.builder()
+				.subjectName(row.getCell(1).getStringCellValue())
+				.status(true)
+				.build();
+				list.add(subject);
+			}
+		}
+		try {
+			repository.saveAll(list);
+			System.out.println("insert completed");
+		} catch (DataIntegrityViolationException e) {
+			// TODO: handle exception
+			throw new CustomException(Messages.MSG_037);
+		}
 	}
 
 }

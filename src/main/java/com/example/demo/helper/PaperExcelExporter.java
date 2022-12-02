@@ -36,17 +36,17 @@ public class PaperExcelExporter {
         font.setFontHeight(16);
         style.setFont(font);
          
-        createCell(row, 5, "Paper ID", style);      
-        createCell(row, 6, "Student name", style);       
-        createCell(row, 7, "Class Name", style);    
-        createCell(row, 8, "Theory Mark", style);
-        createCell(row, 9, "Practice Mark", style);
-        createCell(row, 10, "Result", style);
+        createCell(row, 0, "Paper ID", style);      
+        createCell(row, 1, "Student name", style);       
+        createCell(row, 2, "Class Name", style);    
+        createCell(row, 3, "Theory Mark", style);
+        createCell(row, 4, "Practice Mark", style);
+        createCell(row, 5, "Result", style);
          
     }
 	
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
-        sheet.autoSizeColumn(columnCount);
+		sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
         if (value instanceof Integer) {
             cell.setCellValue((Integer) value);
@@ -62,16 +62,15 @@ public class PaperExcelExporter {
      
     private void writeDataLines() {
         int rowCount = 1;
- 
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
-                 
+       
         for (PaperResponse p : papers) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
-             
+            
             createCell(row, columnCount++, p.getId(), style);
             createCell(row, columnCount++, p.getStudentName(), style);
             createCell(row, columnCount++, p.getClassName(), style);

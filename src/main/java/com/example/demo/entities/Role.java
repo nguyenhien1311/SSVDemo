@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
-@Table(name = "Role")
+@Table(name = "Role",uniqueConstraints = {@UniqueConstraint(columnNames = {"role_name"})})
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

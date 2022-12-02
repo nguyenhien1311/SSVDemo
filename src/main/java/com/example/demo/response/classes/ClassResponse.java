@@ -1,5 +1,7 @@
 package com.example.demo.response.classes;
 
+import java.util.Date;
+
 import com.example.demo.enums.ClassStatus;
 import com.example.demo.response.ResponseBody;
 
@@ -17,9 +19,11 @@ import lombok.NoArgsConstructor;
 public class ClassResponse extends ResponseBody{
 	private int id;
 	
-	private String code;
-	
 	private String className;
+	
+	private Date startDate;
+	
+	private Date endDate;
 	
 	private ClassStatus status;
 	
