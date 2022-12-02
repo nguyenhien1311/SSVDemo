@@ -32,7 +32,7 @@
                                         </tr>
                                     </tbody>
                                 </table>     
-        <div >
+        <div  style="margin-bottom: 30px;">
           You don't have an account? <a @click="moveToRegister" style="cursor: pointer; color: blue;">Register</a>
         </div>
         <button type="submit" class="btn btn-success" id="login_button">
@@ -102,7 +102,6 @@ export default {
       }else{
         this.$router.push("/")
       }
-      
     }
   },
 };

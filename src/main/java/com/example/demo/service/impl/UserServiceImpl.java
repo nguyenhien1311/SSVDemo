@@ -250,18 +250,26 @@ public class UserServiceImpl implements UserService {
 		for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
 			if (i > 0 ) {
 				XSSFRow row = sheet.getRow(i);
-				String username = generateUsername(row.getCell(1).getStringCellValue());
-				String phone =  row.getCell(3).getStringCellValue();
-				User user = User.builder()
-				.fullName(row.getCell(1).getStringCellValue())
-				.email(row.getCell(2).getStringCellValue())
-				.phone(phone)
-				.username(username)
-				.password(encoder.encode(username))
-				.status(true)
-				.roles(roles)
-				.build();
-				list.add(user);
+				try {
+					String value = row.getCell(1).getStringCellValue();
+					if("".equals(value)){
+						break;
+					}
+					String username = generateUsername(value);
+					String phone =  row.getCell(3).getStringCellValue();
+					User user = User.builder()
+					.fullName(value)
+					.email(row.getCell(2).getStringCellValue())
+					.phone(phone)
+					.username(username)
+					.password(encoder.encode(username))
+					.status(true)
+					.roles(roles)
+					.build();
+					list.add(user);
+				}catch(NullPointerException ex) {
+					break;
+				}
 			}
 		}
 		try {

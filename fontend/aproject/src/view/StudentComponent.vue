@@ -18,7 +18,7 @@
                     <button class="btn btn-success" type="button" style="margin-left: 20px;float:right;"
                         @click="search(key)">Search</button>
                 </div>
-                <div v-if="this.$store.state.authorities != 'ROLE_SUPERVISOR'">
+                <div>
                 <button class="btn btn-primary" type="button" style="float:right;" @click="importFile()">Import</button>
                 <input class="file" type="file" @change="changeFile()" ref="file"
                     style="margin-left: 20px;float:right; width: 300px;" />

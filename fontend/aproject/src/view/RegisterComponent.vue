@@ -45,7 +45,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="alternative-option mt-4">
+      <div class="alternative-option mt-4" style="margin-bottom: 30px;">
           You already have an account? <a @click="moveToLogin()" style="cursor: pointer; color: blue;">Back to login</a>
         </div>
         <button type="submit" class="btn btn-success" id="login_button">

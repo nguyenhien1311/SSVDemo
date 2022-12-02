@@ -102,8 +102,7 @@ const routes = [
       authRequired: true,
       role: [
         "ROLE_USER",
-        "ROLE_ADMIN",
-        "ROLE_SUPERVISOR"
+        "ROLE_ADMIN"
       ]
     },
     props: {

@@ -285,6 +285,7 @@ export default {
     data() {
         return {
             timemap: '',
+            now : new Date(),
             startDate: new Date(),
             endDate: new Date(),
             classes: [],
@@ -522,7 +523,16 @@ export default {
             this.v$.$validate();
             if (!this.v$.$error) {
                 const id = this.classId
-                if (this.startDate >= this.endDate) {
+                console.log(this.now)
+                if (this.startDate <= this.now ) {
+                    alert("Time range invalid!")
+                    e.preventDefault();
+                }
+                if (this.endDate <= this.now ) {
+                    alert("Time range invalid!")
+                    e.preventDefault();
+                }
+                if (this.startDate < this.endDate) {
                     alert("Time range invalid!")
                     e.preventDefault();
                 }
